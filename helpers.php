@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Translation\Translator;
+
+if (!function_exists('disk')) {
+    function disk(?string $name = null): Filesystem
+    {
+        return \Illuminate\Support\Facades\Storage::disk($name);
+    }
+}
+
+if (!function_exists('localize')) {
+    function localize($key = null, $replace = [], $locale = null): array|string|Translator|Application|null
+    {
+        $json = 'lang/' . config('app.locale') . '.json';
+        $keys = json_decode(disk('root')->get($json) ?? [], true);
+
+        if (!isset($keys[$key])) {
+            dispatch(function () use ($json, $key) {
+                $keys = json_decode(disk('root')->get($json) ?? [], true);
+                $keys[$key] = $key;
+                disk('root')->put($json, json_encode(array_unique($keys)));
+            })->onQueue('translator');
+        }
+
+        return trans($key, $replace, $locale);
+    }
+}
