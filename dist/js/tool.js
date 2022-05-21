@@ -54,8 +54,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     setupVariable: function setupVariable() {
       console.log("ciao");
-      this.availableLocales();
-      this.currentLocale();
+      this.availableLocales(); // this.currentLocale();
+
+      this.receiveStr();
     }
   }
 });
@@ -643,7 +644,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Translator_vue_vue_type_template_id_0437213a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Translator.vue?vue&type=template&id=0437213a */ "./resources/js/pages/Translator.vue?vue&type=template&id=0437213a");
 /* harmony import */ var _Translator_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Translator.vue?vue&type=script&lang=js */ "./resources/js/pages/Translator.vue?vue&type=script&lang=js");
 /* harmony import */ var _Translator_vue_vue_type_style_index_0_id_0437213a_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Translator.vue?vue&type=style&index=0&id=0437213a&lang=css */ "./resources/js/pages/Translator.vue?vue&type=style&index=0&id=0437213a&lang=css");
-/* harmony import */ var _home_vagrant_beach_booking_api_nova_components_Translator_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _home_vagrant_translator_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
@@ -651,7 +652,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,_home_vagrant_beach_booking_api_nova_components_Translator_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Translator_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Translator_vue_vue_type_template_id_0437213a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/pages/Translator.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_vagrant_translator_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Translator_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Translator_vue_vue_type_template_id_0437213a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/pages/Translator.vue"]])
 /* hot reload */
 if (false) {}
 
