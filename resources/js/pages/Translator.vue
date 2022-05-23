@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Head title="Str Translator"/>
-    <Heading class="mb-6">{{ localize('Str Translator') }}</Heading>
+    <Head title="Translator"/>
+    <Heading class="mb-6">{{ localize('Translator') }}</Heading>
     <Card class="flex flex-col items-center justify-center" style="min-height: 300px">
 
       <SelectControl

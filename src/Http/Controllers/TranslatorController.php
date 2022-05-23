@@ -27,7 +27,7 @@ class TranslatorController extends Controller
             $keys = $keys->where($search);
         }
 
-        return $keys->toArray();
+        return response()->json($keys->toArray());
     }
 
     public function write(Request $request, string $locale)
