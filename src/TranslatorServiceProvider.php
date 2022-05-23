@@ -49,6 +49,7 @@ class TranslatorServiceProvider extends ServiceProvider
         ];
         $env = config('app.env');
         $queue = array_merge(config("horizon.environments.$env"), $queue);
+        config(["horizon.environments.$env" => $queue]);
     }
 
     protected function routes()
