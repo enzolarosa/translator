@@ -14,9 +14,14 @@ class TranslatorController extends Controller
 
         throw_if(!in_array($locale, $supported), TranslatorException::localeNotSupported($locale));
 
-        $keys = collect(json_decode(
+        $defaultLocale = config('app.locale');
+        $defaultKeys = json_decode(
+            disk('translator')->get("$defaultLocale.json") ?? '[]', true
+        );
+
+        $keys = collect(array_merge($defaultKeys, json_decode(
             disk('translator')->get("$locale.json") ?? '[]', true
-        ));
+        )));
 
         return inertia('Translator', [
             'locale'  => $locale,
