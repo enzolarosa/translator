@@ -15,14 +15,14 @@ if (!function_exists('disk')) {
 if (!function_exists('localize')) {
     function localize($key = null, $replace = [], $locale = null): array|string|Translator|Application|null
     {
-        $json = 'lang/' . config('app.locale') . '.json';
-        $keys = json_decode(disk('root')->get($json) ?? '[]', true);
+        $json = config('app.locale') . '.json';
+        $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
 
         if (!isset($keys[$key])) {
             dispatch(function () use ($json, $key) {
-                $keys = json_decode(disk('root')->get($json) ?? [], true);
+                $keys = json_decode(disk('translator')->get($json) ?? [], true);
                 $keys[$key] = $key;
-                disk('root')->put($json, json_encode(array_unique($keys)));
+                disk('translator')->put($json, json_encode(array_unique($keys)));
             })->onQueue('translator');
         }
 
