@@ -23,6 +23,14 @@ class TranslatorServiceProvider extends ServiceProvider
         });
     }
 
+    public function register()
+    {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/translator.php',
+            'translator'
+        );
+    }
+
     protected function filesystems()
     {
         config([
@@ -38,13 +46,15 @@ class TranslatorServiceProvider extends ServiceProvider
     {
         $queue = [
             'translator' => [
-                'connection'   => 'redis',
-                'queue'        => ['translator'],
-                'balance'      => 'simple',
-                'maxProcesses' => 1,
-                'memory'       => 128,
-                'tries'        => 1,
-                'nice'         => 0,
+                'connection'      => 'redis',
+                'queue'           => [config('translator.horizon.queue')],
+                'balance'         => config('translator.horizon.balance'),
+                'tries'           => config('translator.horizon.tries'),
+                'timeout'         => config('translator.horizon.timeout'),
+                'maxProcesses'    => config('translator.horizon.maxProcesses'),
+                'minProcesses'    => config('translator.horizon.minProcesses'),
+                'balanceCooldown' => config('translator.horizon.balanceCooldown'),
+                'balanceMaxShift' => config('translator.horizon.balanceMaxShift'),
             ],
         ];
         $queue = array_merge(config("horizon.defaults") ?? [], $queue);
@@ -64,4 +74,5 @@ class TranslatorServiceProvider extends ServiceProvider
             ->prefix('nova-vendor/translator')
             ->group(__DIR__ . '/../routes/api.php');
     }
+
 }

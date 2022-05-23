@@ -14,14 +14,14 @@ class TranslatorController extends Controller
 
     public function availableLocales(Request $request)
     {
-        return config('app.supported_locale');
+        return config('translator.supported_language');
     }
 
     public function receive(Request $request, string $locale)
     {
         $keys = collect(
             json_decode(
-                disk('translator')->get("lang/$locale.json") ?? '[]', true
+                disk('translator')->get("$locale.json") ?? '[]', true
             )
         );
 
