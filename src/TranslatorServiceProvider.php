@@ -17,12 +17,13 @@ class TranslatorServiceProvider extends ServiceProvider
             $this->routes();
             $this->horizon();
             $this->filesystems();
-            $this->loadTranslationFiles();
         });
 
         Nova::serving(function (ServingNova $event) {
             //
         });
+
+        $this->registerResources();
     }
 
     public function register()
@@ -33,13 +34,9 @@ class TranslatorServiceProvider extends ServiceProvider
         );
     }
 
-    protected function loadTranslationFiles()
+    protected function registerResources()
     {
-        $this->callAfterResolving('translator', function ($translator) {
-            collect(disk('translator')->files())
-                ->filter(fn($lang) => Str::endsWith($lang, '.json'))
-                ->each(fn($lang) => $translator->addJsonPath(disk('translator')->path($lang)));
-        });
+        $this->loadJsonTranslationsFrom(lang_path('vendor/translator'));
     }
 
     protected function filesystems()
