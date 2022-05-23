@@ -17,13 +17,12 @@ class TranslatorServiceProvider extends ServiceProvider
             $this->routes();
             $this->horizon();
             $this->filesystems();
+            $this->loadTranslationFiles();
         });
 
         Nova::serving(function (ServingNova $event) {
             //
         });
-
-        $this->loadTranslationFiles();
     }
 
     public function register()
