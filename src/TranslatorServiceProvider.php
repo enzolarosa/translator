@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 use Route;
+use Str;
 
 class TranslatorServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,8 @@ class TranslatorServiceProvider extends ServiceProvider
         Nova::serving(function (ServingNova $event) {
             //
         });
+
+        $this->loadTranslationFiles();
     }
 
     public function register()
@@ -29,6 +32,15 @@ class TranslatorServiceProvider extends ServiceProvider
             __DIR__ . '/../config/translator.php',
             'translator'
         );
+    }
+
+    protected function loadTranslationFiles()
+    {
+        $this->callAfterResolving('translator', function ($translator) {
+            collect(disk('translator')->files())
+                ->filter(fn($lang) => Str::endsWith($lang, '.json'))
+                ->each(fn($lang) => $translator->addJsonPath(disk('translator')->path($lang)));
+        });
     }
 
     protected function filesystems()
