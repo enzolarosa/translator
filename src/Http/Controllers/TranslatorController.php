@@ -34,6 +34,6 @@ class TranslatorController extends Controller
 
     public function write(Request $request, string $locale)
     {
-
+# todo update this method
     }
 }
