@@ -47,9 +47,8 @@ class TranslatorServiceProvider extends ServiceProvider
                 'nice'         => 0,
             ],
         ];
-        $env = config('app.env');
-        $queue = array_merge(config("horizon.environments.$env") ?? [], $queue);
-        config(["horizon.environments.$env" => $queue]);
+        $queue = array_merge(config("horizon.defaults") ?? [], $queue);
+        config(["horizon.defaults" => $queue]);
     }
 
     protected function routes()
