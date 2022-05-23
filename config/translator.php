@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'git' => [
+        'autoPush' => env('TRANSLATOR_AUTO_PUSH', false),
+        'message'  => env('TRANSLATOR_COMMIT_MESSAGE', localize('updated translation with `translator` package.')),
+    ],
+
     'supported_language' => [
         'en',
         'it',
