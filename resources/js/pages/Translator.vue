@@ -1,85 +1,69 @@
 <template>
-  <div>
-    <Head title="Translator"/>
-    <Heading class="mb-6">{{ localize('Translator') }}</Heading>
+    <div>
+        <Head title="Translator"/>
+        <Heading class="mb-6">Translator</Heading>
 
-    <Card class="flex flex-col items-center justify-center" style="min-height: 300px">
-      <table>
-        <thead>
-        <th>{{ localize('Key') }}</th>
-        <th>{{ localize('Translation') }}</th>
-        </thead>
-        <tbody>
-        <tr v-for="(translate, key) in keys ">
-          <td> {{ key }}</td>
-          <td>{{ translate }}</td>
-        </tr>
-        </tbody>
-      </table>
-<!--      <SelectControl-->
-<!--          :options="locales"-->
-<!--          v-model:selected="locale"-->
-<!--          @input="locale = $event.target.value"-->
-<!--          @change="receiveStr"/>-->
+        <Card class="flex flex-col items-center justify-center" style="min-height: 300px">
+            <button @click="setLocale(locale)" v-for="locale in locales">Load <b>{{ locale }}</b></button>
+            <br/>
+            <button @click="update" class="btn btn-success">Update Translation</button>
 
-<!--      <p class="dark:text-white text-lg opacity-70">-->
-<!--        {{ keys }}-->
-<!--      </p>-->
-    </Card>
-  </div>
+            <table class="table-auto">
+                <thead>
+                <th>Key</th>
+                <th>Translation</th>
+                </thead>
+                <tbody>
+                <tr v-for="translate in keys" v-bind:key="translate.key">
+                    <td>{{ translate.key }}</td>
+                    <td>
+                        <input type="text" v-model="translate.str">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </Card>
+    </div>
 </template>
 
 <script>
-import api from '../api';
 
 export default {
-  data: () => ({
-    search: null,
-  }),
+    data: () => ({
+        search: null,
+    }),
 
-  props: {
-    keys: Array,
-    locales: Array,
-    locale: '',
-  },
-
-  mounted() {
-    this.setupVariable();
-    console.log(this.keys, this.locale, this.locales)
-  },
-
-  methods: {
-    receiveStr() {
-      console.log(this.locales, this.locale, this.keys)
-      return api.receiveStr(this.locale)
-          .then(keys => this.keys = keys);
+    props: {
+        keys: Array,
+        locales: Array,
+        locale: '',
     },
 
-    writeStr() {
-      return api.writeStr(this.locale, this.keys)
+    mounted() {
+        console.log(this.keys, this.locale, this.locales)
     },
 
-    availableLocales() {
-      return api.availableLocales()
-          .then(locales => this.locales = locales);
-    },
+    methods: {
+        update() {
+            console.log("will update", this.keys);
+            Nova.request()
+                .post(`/nova-vendor/translator`, {
+                    keys: this.keys,
+                    locale: this.locale
+                })
+                .then(response => {
+                    window.location=window.location.href;
+                });
+        },
 
-    currentLocale() {
-      return api.currentLocale()
-          .then(locale => this.locale = locale);
-    },
-
-    setupVariable() {
-      console.log("ciao asd");
-      // this.availableLocales();
-
-      // this.currentLocale();
-      // this.receiveStr();
+        setLocale(locale) {
+            window.location=window.location.href.replace(this.locale, locale);
+        }
     }
-  }
 }
 </script>
 
 <style>
 /* Scoped Styles */
+
 </style>

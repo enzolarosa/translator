@@ -2,36 +2,26 @@
 
 namespace enzolarosa\Translator\Http\Controllers;
 
-use Illuminate\Http\Request;
+use enzolarosa\Translator\Exceptions\TranslatorException;
 use Illuminate\Routing\Controller;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class TranslatorController extends Controller
 {
-    public function currentLocale(Request $request)
+    public function index(NovaRequest $request, string $locale = 'en')
     {
-        return response()->json(config('app.locale'));
-    }
+        $supported = config('translator.supported_language');
 
-    public function availableLocales(Request $request)
-    {
-        return response()->json(config('translator.supported_language'));
-    }
+        throw_if(!in_array($locale, $supported), TranslatorException::localeNotSupported($locale));
 
-    public function receive(Request $request, string $locale)
-    {
         $keys = collect(json_decode(
             disk('translator')->get("$locale.json") ?? '[]', true
         ));
 
-        if ($search = $request->get('search')) {
-            $keys = $keys->where($search);
-        }
-
-        return response()->json($keys->toArray());
-    }
-
-    public function write(Request $request, string $locale)
-    {
-# todo update this method
+        return inertia('Translator', [
+            'locale'  => $locale,
+            'locales' => $supported,
+            'keys'    => $keys->map(fn($str, $key) => ['key' => $key, 'str' => $str])->toArray(),
+        ]);
     }
 }

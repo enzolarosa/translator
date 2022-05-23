@@ -1,7 +1,10 @@
 <?php
 
-use enzolarosa\Translator\Http\Controllers\Inertia\IndexController;
+use enzolarosa\Translator\Http\Controllers\TranslatorController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
-Route::get('/', [IndexController::class, 'index']);
+Route::controller(TranslatorController::class)
+    ->name('translator.')
+    ->group(function () {
+        Route::get('/{locale?}', 'index')->name('index');
+    });
