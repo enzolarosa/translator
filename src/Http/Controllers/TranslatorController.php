@@ -21,7 +21,7 @@ class TranslatorController extends Controller
     {
         $keys = collect(
             json_decode(
-                disk('root')->get("lang/$locale.json") ?? [], true
+                disk('translator')->get("lang/$locale.json") ?? '[]', true
             )
         );
 
