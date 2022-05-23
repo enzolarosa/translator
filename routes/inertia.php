@@ -1,8 +1,7 @@
 <?php
 
+use enzolarosa\Translator\Http\Controllers\Inertia\IndexController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-Route::get('/', function (NovaRequest $request) {
-    return inertia('Translator');
-});
+Route::get('/', [IndexController::class, 'index']);

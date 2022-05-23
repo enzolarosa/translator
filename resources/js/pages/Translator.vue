@@ -4,15 +4,27 @@
     <Heading class="mb-6">{{ localize('Translator') }}</Heading>
 
     <Card class="flex flex-col items-center justify-center" style="min-height: 300px">
-      <SelectControl
-          :options="locales"
-          v-model:selected="locale"
-          @input="locale = $event.target.value"
-          @change="receiveStr"/>
+      <table>
+        <thead>
+        <th>{{ localize('Key') }}</th>
+        <th>{{ localize('Translation') }}</th>
+        </thead>
+        <tbody>
+        <tr v-for="(translate, key) in keys ">
+          <td> {{ key }}</td>
+          <td>{{ translate }}</td>
+        </tr>
+        </tbody>
+      </table>
+<!--      <SelectControl-->
+<!--          :options="locales"-->
+<!--          v-model:selected="locale"-->
+<!--          @input="locale = $event.target.value"-->
+<!--          @change="receiveStr"/>-->
 
-      <p class="dark:text-white text-lg opacity-70">
-        {{ keys }}
-      </p>
+<!--      <p class="dark:text-white text-lg opacity-70">-->
+<!--        {{ keys }}-->
+<!--      </p>-->
     </Card>
   </div>
 </template>
@@ -23,13 +35,17 @@ import api from '../api';
 export default {
   data: () => ({
     search: null,
-    locale: 'en',
-    locales: [],
-    keys: [],
   }),
+
+  props: {
+    keys: Array,
+    locales: Array,
+    locale: '',
+  },
 
   mounted() {
     this.setupVariable();
+    console.log(this.keys, this.locale, this.locales)
   },
 
   methods: {
@@ -54,10 +70,11 @@ export default {
     },
 
     setupVariable() {
-      this.availableLocales();
+      console.log("ciao asd");
+      // this.availableLocales();
 
       // this.currentLocale();
-      this.receiveStr();
+      // this.receiveStr();
     }
   }
 }
