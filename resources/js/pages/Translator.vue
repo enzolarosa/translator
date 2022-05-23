@@ -2,8 +2,8 @@
   <div>
     <Head title="Translator"/>
     <Heading class="mb-6">{{ localize('Translator') }}</Heading>
-    <Card class="flex flex-col items-center justify-center" style="min-height: 300px">
 
+    <Card class="flex flex-col items-center justify-center" style="min-height: 300px">
       <SelectControl
           :options="locales"
           v-model:selected="locale"
@@ -54,7 +54,6 @@ export default {
     },
 
     setupVariable() {
-      console.log("ciao");
       this.availableLocales();
 
       // this.currentLocale();
