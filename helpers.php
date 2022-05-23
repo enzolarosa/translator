@@ -20,7 +20,7 @@ if (!function_exists('localize')) {
 
         if (!isset($keys[$key])) {
             dispatch(function () use ($json, $key) {
-                $keys = json_decode(disk('translator')->get($json) ?? [], true);
+                $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
                 $keys[$key] = $key;
                 disk('translator')->put($json, json_encode(array_unique($keys)));
             })->onQueue('translator');
