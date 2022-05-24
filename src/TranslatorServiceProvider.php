@@ -24,11 +24,19 @@ class TranslatorServiceProvider extends ServiceProvider
         });
 
         $this->registerResources();
+        $this->publishResources();
     }
 
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/translator.php', 'translator');
+    }
+
+    protected function publishResources()
+    {
+        $this->publishes([
+            __DIR__ . '/../config/translator.php' => config_path('translator.php'),
+        ], 'translator-config');
     }
 
     protected function registerResources()
