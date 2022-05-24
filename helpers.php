@@ -15,7 +15,7 @@ if (!function_exists('disk')) {
 if (!function_exists('localize')) {
     function localize($key = null, $replace = [], $locale = null): array|string|Translator|Application|null
     {
-        $json = config('app.locale') . '.json';
+        $json = config('translator.locale') . '.json';
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
 
         if (!isset($keys[$key])) {

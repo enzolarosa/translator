@@ -6,6 +6,8 @@ return [
         'message'  => env('TRANSLATOR_COMMIT_MESSAGE', 'updated translation with `translator` package.'),
     ],
 
+    'locale' => 'en',
+
     'supported_language' => [
         'en',
         'it',
@@ -21,5 +23,4 @@ return [
         'balanceCooldown' => env('TRANSLATOR_BALANCE_COOLDOWN', 1),
         'balanceMaxShift' => env('TRANSLATOR_BALANCE_MAX_SHIFT', 1),
     ],
-
 ];
