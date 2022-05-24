@@ -24,7 +24,7 @@ class TranslatorMiddleware
 
         if (
             !blank($lang = $request->header('X-Request-Language'))
-            && in_array($lang, config('translator.supported_locale'))
+            && in_array($lang, config('translator.supported_language'))
         ) {
             app()->setLocale($lang);
         }
