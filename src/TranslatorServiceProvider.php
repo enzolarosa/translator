@@ -6,8 +6,7 @@ use enzolarosa\Translator\Http\Middleware\Authorize;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
-use Route;
-use Str;
+use Illuminate\Routing\Route;
 
 class TranslatorServiceProvider extends ServiceProvider
 {
@@ -49,8 +48,8 @@ class TranslatorServiceProvider extends ServiceProvider
         config([
             'filesystems.disks.translator' => [
                 'driver' => 'local',
-                'root'   => base_path('lang/vendor/translator'),
-                'throw'  => false,
+                'root' => base_path('lang/vendor/translator'),
+                'throw' => false,
             ],
         ]);
     }
@@ -59,13 +58,13 @@ class TranslatorServiceProvider extends ServiceProvider
     {
         $queue = [
             'translator' => [
-                'connection'      => 'redis',
-                'queue'           => [config('translator.horizon.queue')],
-                'balance'         => config('translator.horizon.balance'),
-                'tries'           => config('translator.horizon.tries'),
-                'timeout'         => config('translator.horizon.timeout'),
-                'maxProcesses'    => config('translator.horizon.maxProcesses'),
-                'minProcesses'    => config('translator.horizon.minProcesses'),
+                'connection' => 'redis',
+                'queue' => [config('translator.horizon.queue')],
+                'balance' => config('translator.horizon.balance'),
+                'tries' => config('translator.horizon.tries'),
+                'timeout' => config('translator.horizon.timeout'),
+                'maxProcesses' => config('translator.horizon.maxProcesses'),
+                'minProcesses' => config('translator.horizon.minProcesses'),
                 'balanceCooldown' => config('translator.horizon.balanceCooldown'),
                 'balanceMaxShift' => config('translator.horizon.balanceMaxShift'),
             ],
@@ -87,5 +86,4 @@ class TranslatorServiceProvider extends ServiceProvider
             ->prefix('nova-vendor/translator')
             ->group(__DIR__ . '/../routes/api.php');
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace enzolarosa\Translator\Http\Middleware;
 
-use Arr;
 use Closure;
+use Illuminate\Support\Arr;
 
 class TranslatorMiddleware
 {

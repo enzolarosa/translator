@@ -12,21 +12,23 @@ class TranslatorController extends Controller
     {
         $supported = config('translator.supported_language');
 
-        throw_if(!in_array($locale, $supported), TranslatorException::localeNotSupported($locale));
+        throw_if(! in_array($locale, $supported), TranslatorException::localeNotSupported($locale));
 
         $defaultLocale = config('app.locale');
         $defaultKeys = json_decode(
-            disk('translator')->get("$defaultLocale.json") ?? '[]', true
+            disk('translator')->get("$defaultLocale.json") ?? '[]',
+            true
         );
 
         $keys = collect(array_merge($defaultKeys, json_decode(
-            disk('translator')->get("$locale.json") ?? '[]', true
+            disk('translator')->get("$locale.json") ?? '[]',
+            true
         )));
 
         return inertia('Translator', [
-            'locale'  => $locale,
+            'locale' => $locale,
             'locales' => $supported,
-            'keys'    => $keys->map(fn($str, $key) => ['key' => $key, 'str' => $str])->toArray(),
+            'keys' => $keys->map(fn ($str, $key) => ['key' => $key, 'str' => $str])->toArray(),
         ]);
     }
 }

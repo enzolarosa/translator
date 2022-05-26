@@ -9,10 +9,10 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'keys'       => 'required|array',
+            'keys' => 'required|array',
             'keys.*.key' => 'required|string',
             'keys.*.str' => 'required|string',
-            'locale'     => 'required|string|in:' . implode(',', config('translator.supported_language')),
+            'locale' => 'required|string|in:' . implode(',', config('translator.supported_language')),
         ];
     }
 }

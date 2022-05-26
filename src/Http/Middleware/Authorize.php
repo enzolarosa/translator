@@ -2,8 +2,8 @@
 
 namespace enzolarosa\Translator\Http\Middleware;
 
+use enzolarosa\Translator\Translator;
 use Laravel\Nova\Nova;
-use Enzolarosa\Translator\Translator;
 
 class Authorize
 {

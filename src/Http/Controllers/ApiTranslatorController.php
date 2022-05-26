@@ -10,10 +10,11 @@ class ApiTranslatorController extends Controller
 {
     public function store(StoreRequest $request)
     {
-        $defaultLocale = config('app.locale');
+        $defaultLocale = config('translator.locale');
 
         $startKeys = json_decode(
-            disk('translator')->get("$defaultLocale.json") ?? '[]', true
+            disk('translator')->get("$defaultLocale.json") ?? '[]',
+            true
         );
 
         $targetLocale = "{$request->get('locale')}.json";
@@ -21,7 +22,7 @@ class ApiTranslatorController extends Controller
         $resultKeys = array_merge(
             $startKeys,
             collect($request->get('keys'))
-                ->mapWithKeys(fn($translate) => [$translate['key'] => $translate['str']])
+                ->mapWithKeys(fn ($translate) => [$translate['key'] => $translate['str']])
                 ->toArray()
         );
 
