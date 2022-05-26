@@ -3,10 +3,10 @@
 namespace enzolarosa\Translator;
 
 use enzolarosa\Translator\Http\Middleware\Authorize;
+use Illuminate\Routing\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
-use Illuminate\Routing\Route;
 
 class TranslatorServiceProvider extends ServiceProvider
 {
