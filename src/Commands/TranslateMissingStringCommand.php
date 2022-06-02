@@ -11,7 +11,6 @@ class TranslateMissingStringCommand extends Command
 
     public function handle(): int
     {
-
         return self::SUCCESS;
     }
 }
