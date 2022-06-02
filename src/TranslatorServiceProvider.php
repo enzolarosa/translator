@@ -42,6 +42,10 @@ class TranslatorServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/translator.php' => config_path('translator.php'),
         ], 'translator-config');
+
+        $this->publishes([
+            __DIR__ . '/../lang/en.json' => lang_path('vendor/translator/en.json'),
+        ], 'translator-lang');
     }
 
     protected function registerCommands()
