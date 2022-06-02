@@ -2,6 +2,7 @@
 
 namespace enzolarosa\Translator;
 
+use enzolarosa\Translator\Commands\TranslateMissingStringCommand;
 use enzolarosa\Translator\Http\Middleware\Authorize;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -10,6 +11,10 @@ use Laravel\Nova\Nova;
 
 class TranslatorServiceProvider extends ServiceProvider
 {
+    public array $packageCommands = [
+        TranslateMissingStringCommand::class,
+    ];
+
     public function boot()
     {
         $this->app->booted(function () {
@@ -23,6 +28,7 @@ class TranslatorServiceProvider extends ServiceProvider
         });
 
         $this->registerResources();
+        $this->registerCommands();
         $this->publishResources();
     }
 
@@ -36,6 +42,11 @@ class TranslatorServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/translator.php' => config_path('translator.php'),
         ], 'translator-config');
+    }
+
+    protected function registerCommands()
+    {
+        $this->commands($this->packageCommands);
     }
 
     protected function registerResources()
