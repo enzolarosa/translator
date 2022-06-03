@@ -2,7 +2,7 @@
 
 namespace enzolarosa\Translator\Http\Middleware;
 
-use enzolarosa\Translator\Translator;
+use enzolarosa\Translator\TranslatorTool;
 use Laravel\Nova\Nova;
 
 class Authorize
@@ -29,6 +29,6 @@ class Authorize
      */
     public function matchesTool($tool)
     {
-        return $tool instanceof Translator;
+        return $tool instanceof TranslatorTool;
     }
 }

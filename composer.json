@@ -41,7 +41,10 @@
     "laravel": {
       "providers": [
         "enzolarosa\\Translator\\TranslatorServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "Translator": "enzolarosa\\Translator\\Facades\\Translator"
+      }
     }
   },
   "config": {

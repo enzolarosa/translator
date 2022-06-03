@@ -2,34 +2,18 @@
 
 namespace enzolarosa\Translator;
 
-use Illuminate\Http\Request;
-use Laravel\Nova\Menu\MenuSection;
-use Laravel\Nova\Nova;
-use Laravel\Nova\Tool;
 
-class Translator extends Tool
+use Illuminate\Support\Facades\Http;
+
+class Translator
 {
-    /**
-     * Perform any tasks that need to happen when the tool is booted.
-     *
-     * @return void
-     */
-    public function boot()
+    public static function translate(string $text, string $target)
     {
-        Nova::script('translator', __DIR__.'/../dist/js/tool.js');
-        Nova::style('translator', __DIR__.'/../dist/css/tool.css');
-    }
-
-    /**
-     * Build the menu that renders the navigation links for the tool.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return mixed
-     */
-    public function menu(Request $request)
-    {
-        return MenuSection::make('Translator')
-            ->path('/translator')
-            ->icon('translate');
+        return Http::asJson()->post('https://translate.enzolarosa.dev/translate', [
+            'q' => $text,
+            'source' => 'auto',
+            'target' => $target,
+            'format' => 'text',
+        ])->object();
     }
 }
