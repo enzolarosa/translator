@@ -20,7 +20,7 @@ class TranslateMissingStringCommand extends Command
             $targetKeys = json_decode(disk('translator')->get("$target.json") ?? '[]', true);
             $count[$target] = 0;
             foreach ($keys as $key => $string) {
-                if (!blank($targetKeys[$key])) {
+                if (! blank($targetKeys[$key])) {
                     continue;
                 }
                 $targetKeys[$key] = Translator::translate($string, $target)->translatedText ?? $string;

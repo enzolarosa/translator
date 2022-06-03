@@ -2,7 +2,6 @@
 
 namespace enzolarosa\Translator;
 
-
 use Illuminate\Support\Facades\Http;
 
 class Translator
