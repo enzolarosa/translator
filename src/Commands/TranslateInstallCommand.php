@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 class TranslateInstallCommand extends Command
 {
     public $signature = 'translate:install';
-    protected $description = 'Install all of the Translate';
+    protected $description = 'Install all of the Translate resources';
 
     public function handle(): int
     {
