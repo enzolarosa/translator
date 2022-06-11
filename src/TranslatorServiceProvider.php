@@ -2,6 +2,7 @@
 
 namespace enzolarosa\Translator;
 
+use enzolarosa\Translator\Commands\TranslateInstallCommand;
 use enzolarosa\Translator\Commands\TranslateMissingStringCommand;
 use enzolarosa\Translator\Http\Middleware\Authorize;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,7 @@ use Laravel\Nova\Nova;
 class TranslatorServiceProvider extends ServiceProvider
 {
     public array $packageCommands = [
+        TranslateInstallCommand::class,
         TranslateMissingStringCommand::class,
     ];
 
