@@ -9,7 +9,7 @@ class TranslateInstallCommand extends Command
     public $signature = 'translate:install';
     protected $description = 'Install all of the Translate resources';
 
-    public function handle(): int
+    public function handle()
     {
         $this->comment(localize('Publishing Translate configuration...'));
         $this->callSilent('vendor:publish', ['--tag' => 'translator-config']);
