@@ -43,7 +43,6 @@ class TranslatorServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../database/migrations/20220620_072100_create_translator_table.php' => database_path('migrations/20220620_072100_create_translator_table.php'),
         ], 'translator-migrations');
-
     }
 
     protected function registerCommands()
@@ -54,7 +53,6 @@ class TranslatorServiceProvider extends ServiceProvider
     protected function registerResources()
     {
         if (config('translator.driver') == 'database') {
-
         }
 
         $this->loadJsonTranslationsFrom(lang_path('vendor/translator'));
@@ -73,7 +71,7 @@ class TranslatorServiceProvider extends ServiceProvider
 
     protected function horizon()
     {
-        if (!config('translator.horizon.enabled')) {
+        if (! config('translator.horizon.enabled')) {
             return;
         }
 
