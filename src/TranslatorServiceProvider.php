@@ -4,6 +4,8 @@ namespace enzolarosa\Translator;
 
 use enzolarosa\Translator\Commands\TranslateInstallCommand;
 use enzolarosa\Translator\Commands\TranslateMissingStringCommand;
+use enzolarosa\Translator\Commands\TranslateMoveTranslationToDatabaseCommand;
+use enzolarosa\Translator\Models\Translator as Model;
 use Illuminate\Support\ServiceProvider;
 
 class TranslatorServiceProvider extends ServiceProvider
@@ -11,6 +13,7 @@ class TranslatorServiceProvider extends ServiceProvider
     public array $packageCommands = [
         TranslateInstallCommand::class,
         TranslateMissingStringCommand::class,
+        TranslateMoveTranslationToDatabaseCommand::class,
     ];
 
     public function boot()
@@ -54,7 +57,18 @@ class TranslatorServiceProvider extends ServiceProvider
     protected function registerResources()
     {
         if (config('translator.driver') == 'database') {
-
+            Model::query()
+                ->select('language')
+                ->distinct()
+                ->pluck('language')
+                ->each(function ($lang) {
+                    file_put_contents(lang_path("vendor/translator/$lang.json"), json_encode(
+                        Model::query()
+                            ->where('language', $lang)
+                            ->pluck('translation', 'original')
+                            ->toArray()
+                    ));
+                });
         }
 
         $this->loadJsonTranslationsFrom(lang_path('vendor/translator'));

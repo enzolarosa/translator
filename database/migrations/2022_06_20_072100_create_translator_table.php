@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        if (config('translator.driver') == 'database') {
+        if (config('translator.driver') != 'database') {
             return;
         }
 
@@ -16,14 +16,12 @@ return new class extends Migration {
                 $table->id();
                 $table->uuid('external_id')->unique();
 
-                $table->string('language');
+                $table->string('language')->index();
                 $table->text('original');
 
                 $table->text('translation');
 
                 $table->timestamps();
-
-                $table->index(['language', 'original']);
             });
     }
 };

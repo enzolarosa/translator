@@ -6,7 +6,7 @@ use Exception;
 
 class TranslatorException extends Exception
 {
-    public static function localeNotSupported(string $locale)
+    public static function localeNotSupported(string $locale): TranslatorException
     {
         return new self(localize('The selected locale `:locale` wasn\'t found in your configuration.', [
             'locale' => $locale,

@@ -17,7 +17,7 @@ return [
 
     'store' => [
         'database' => [
-            'table' => env('TRANSLATOR_DB_NAME', 'translator'),
+            'table' => env('TRANSLATOR_TABLE_NAME', 'translator'),
             'connection' => env('TRANSLATOR_DB_CONNECTION', 'mysql'),
         ],
 

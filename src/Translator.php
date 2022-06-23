@@ -4,6 +4,7 @@ namespace enzolarosa\Translator;
 
 use enzolarosa\Translator\Models\Translator as Model;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 
 class Translator
 {
@@ -25,8 +26,11 @@ class Translator
         };
     }
 
-    protected function handleDatabaseDriver($key)
+    protected static function handleDatabaseDriver($key): void
     {
+        if (!Schema::hasTable(config('translator.store.database.table'))) {
+            return;
+        }
         Model::query()->firstOrCreate([
             'language' => config('translator.locale'),
             'original' => $key,
@@ -35,7 +39,7 @@ class Translator
         ]);
     }
 
-    protected function handleDefaultDriver($key): void
+    protected static function handleDefaultDriver($key): void
     {
         $json = config('translator.locale') . '.json';
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);

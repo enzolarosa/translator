@@ -31,5 +31,4 @@ class Translator extends Model
         'deleted_at' => 'datetime',
     ];
 
-
 }
