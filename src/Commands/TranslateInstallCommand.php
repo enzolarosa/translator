@@ -17,6 +17,9 @@ class TranslateInstallCommand extends Command
         $this->comment(localize('Publishing Translate language file...'));
         $this->callSilent('vendor:publish', ['--tag' => 'translator-lang']);
 
+        $this->comment('Publishing Translate migrations...');
+        $this->callSilent('vendor:publish', ['--tag' => 'translator-migrations']);
+
         $this->info(localize('Translate was installed successfully.'));
     }
 }

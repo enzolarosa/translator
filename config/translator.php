@@ -13,7 +13,19 @@ return [
         'it',
     ],
 
+    'driver' => env('TRANSLATOR_DRIVER', 'file'),//'database'
+
+    'store' => [
+        'database' => [
+            'table' => env('TRANSLATOR_DB_NAME', 'translator'),
+            'connection' => env('TRANSLATOR_DB_CONNECTION', 'mysql'),
+        ],
+
+        'file' => [],
+    ],
+
     'horizon' => [
+        'enabled'=>env('TRANSLATOR_HORIZON',false),
         'queue' => env('TRANSLATOR_QUEUE', 'translator'),
         'tries' => env('TRANSLATOR_TRIES', 1),
         'timeout' => env('TRANSLATOR_TIMEOUT', 0),

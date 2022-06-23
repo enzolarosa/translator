@@ -4,11 +4,7 @@ namespace enzolarosa\Translator;
 
 use enzolarosa\Translator\Commands\TranslateInstallCommand;
 use enzolarosa\Translator\Commands\TranslateMissingStringCommand;
-use enzolarosa\Translator\Http\Middleware\Authorize;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Nova\Events\ServingNova;
-use Laravel\Nova\Nova;
 
 class TranslatorServiceProvider extends ServiceProvider
 {
@@ -20,13 +16,8 @@ class TranslatorServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->booted(function () {
-            $this->routes();
             $this->horizon();
             $this->filesystems();
-        });
-
-        Nova::serving(function (ServingNova $event) {
-            //
         });
 
         $this->registerResources();
@@ -48,6 +39,11 @@ class TranslatorServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../lang/en.json' => lang_path('vendor/translator/en.json'),
         ], 'translator-lang');
+
+        $this->publishes([
+            __DIR__ . '/../database/migrations/20220620_072100_create_translator_table.php' => database_path('migrations/20220620_072100_create_translator_table.php'),
+        ], 'translator-migrations');
+
     }
 
     protected function registerCommands()
@@ -57,6 +53,10 @@ class TranslatorServiceProvider extends ServiceProvider
 
     protected function registerResources()
     {
+        if (config('translator.driver') == 'database') {
+
+        }
+
         $this->loadJsonTranslationsFrom(lang_path('vendor/translator'));
     }
 
@@ -73,6 +73,10 @@ class TranslatorServiceProvider extends ServiceProvider
 
     protected function horizon()
     {
+        if (!config('translator.horizon.enabled')) {
+            return;
+        }
+
         $queue = [
             'translator' => [
                 'connection' => 'redis',
@@ -88,19 +92,5 @@ class TranslatorServiceProvider extends ServiceProvider
         ];
         $queue = array_merge(config("horizon.defaults") ?? [], $queue);
         config(["horizon.defaults" => $queue]);
-    }
-
-    protected function routes()
-    {
-        if ($this->app->routesAreCached()) {
-            return;
-        }
-
-        Nova::router(['nova', Authorize::class], 'translator')
-            ->group(__DIR__ . '/../routes/inertia.php');
-
-        Route::middleware(['nova', Authorize::class])
-            ->prefix('nova-vendor/translator')
-            ->group(__DIR__ . '/../routes/api.php');
     }
 }
