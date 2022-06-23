@@ -57,7 +57,7 @@ class TranslateMissingStringCommand extends Command
                         'language' => $target,
                         'original' => $translator->original,
                     ], [
-                        'translation' => Translator::translate($translator->original, $target)->translatedText ?? $translator->original
+                        'translation' => Translator::translate($translator->original, $target)->translatedText ?? $translator->original,
                     ]);
                 }
             });

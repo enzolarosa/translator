@@ -3,7 +3,6 @@
 namespace enzolarosa\Translator\Commands;
 
 use enzolarosa\Translator\Models\Translator as Model;
-use enzolarosa\Translator\Translator;
 use Illuminate\Console\Command;
 
 class TranslateMoveTranslationToDatabaseCommand extends Command
@@ -14,19 +13,19 @@ class TranslateMoveTranslationToDatabaseCommand extends Command
     public function handle(): int
     {
         foreach (config('translator.supported_language', []) as $target) {
-            $this->fileToDatabase("$target.json",$target);
+            $this->fileToDatabase("$target.json", $target);
         }
 
         return self::SUCCESS;
     }
 
-    protected function fileToDatabase($path,$language)
+    protected function fileToDatabase($path, $language)
     {
         $keys = json_decode(disk('translator')->get($path) ?? '[]', true);
         foreach ($keys as $key => $string) {
             Model::query()->firstOrCreate([
                 'original' => $key,
-                'language' => $language
+                'language' => $language,
             ], [
                 'translation' => $string,
             ]);

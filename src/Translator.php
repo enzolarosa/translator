@@ -28,7 +28,7 @@ class Translator
 
     protected static function handleDatabaseDriver($key): void
     {
-        if (!Schema::hasTable(config('translator.store.database.table'))) {
+        if (! Schema::hasTable(config('translator.store.database.table'))) {
             return;
         }
         Model::query()->firstOrCreate([
