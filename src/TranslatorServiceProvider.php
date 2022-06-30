@@ -86,7 +86,7 @@ class TranslatorServiceProvider extends ServiceProvider
 
     protected function horizon()
     {
-        if (! config('translator.horizon.enabled')) {
+        if (!config('translator.horizon.enabled')) {
             return;
         }
 

@@ -49,7 +49,7 @@ class Translator
                 $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
                 $keys[$key] = $key;
                 disk('translator')->put($json, json_encode(array_unique($keys)));
-            })->onQueue('operational');
+            });
         }
     }
 }
