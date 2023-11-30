@@ -11,6 +11,10 @@ class Translator
 {
     public static function translate(string $text, string $target, string $current = 'en'): ?string
     {
+        if (strlen($text) == 0) {
+            return $text;
+        }
+
         $client = new TranslateClient([
             'credentials' => [
                 'key' => config('translator.aws.key'),
@@ -45,7 +49,7 @@ class Translator
 
     protected static function handleDatabaseDriver($key): void
     {
-        if (! Schema::hasTable(config('translator.store.database.table'))) {
+        if (!Schema::hasTable(config('translator.store.database.table'))) {
             return;
         }
         Model::query()->firstOrCreate([
@@ -61,7 +65,7 @@ class Translator
         $json = config('translator.locale') . '.json';
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
 
-        if (! isset($keys[$key])) {
+        if (!isset($keys[$key])) {
             dispatch(function () use ($json, $key) {
                 $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
                 $keys[$key] = $key;
