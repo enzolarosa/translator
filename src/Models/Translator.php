@@ -2,7 +2,7 @@
 
 namespace enzolarosa\Translator\Models;
 
-use enzolarosa\MqttBroadcast\Traits\Models\ExternalId;
+use enzolarosa\Translator\Traits\Models\ExternalId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

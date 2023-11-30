@@ -1,6 +1,6 @@
 <?php
 
-namespace enzolarosa\MqttBroadcast\Traits\Models;
+namespace enzolarosa\Translator\Traits\Models;
 
 use Illuminate\Support\Str;
 
