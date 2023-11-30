@@ -2,6 +2,7 @@
 
 namespace enzolarosa\Translator\Commands;
 
+use enzolarosa\Translator\Jobs\GitPush;
 use enzolarosa\Translator\Models\Translator as Model;
 use enzolarosa\Translator\Translator;
 use Illuminate\Console\Command;
@@ -13,8 +14,6 @@ class TranslateMissingStringCommand extends Command
 
     public function handle(): int
     {
-        $count = [];
-
         match (config('translator.driver')) {
             'database' => $this->handleDatabaseDriver(),
             default => $this->handleDefaultDriver(),
@@ -23,7 +22,7 @@ class TranslateMissingStringCommand extends Command
         return self::SUCCESS;
     }
 
-    protected function handleDefaultDriver()
+    protected function handleDefaultDriver(): void
     {
         $json = config('translator.locale') . '.json';
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
@@ -37,16 +36,20 @@ class TranslateMissingStringCommand extends Command
                 if (key_exists($key, $targetKeys)) {
                     continue;
                 }
-                $translated = Translator::translate($string, $target)->translatedText ?? $string;
+                $translated = Translator::translate($string, $target, config('translator.locale')) ?? $string;
                 $targetKeys[$key] = $translated;
                 $count[$target]++;
-                $this->line("`$string` will be: `$translated` for `$target` target");
+                $this->line("[$target] ===> `$string` will be: `$translated`");
             }
             disk('translator')->put("$target.json", json_encode(array_unique($targetKeys)));
         }
+
+        if (config('translator.git.autoPush', false)) {
+            GitPush::dispatch();
+        }
     }
 
-    protected function handleDatabaseDriver()
+    protected function handleDatabaseDriver(): void
     {
         $keys = Model::query()
             ->where('language', config('translator.locale'))
@@ -57,7 +60,7 @@ class TranslateMissingStringCommand extends Command
                         'language' => $target,
                         'original' => $translator->original,
                     ], [
-                        'translation' => Translator::translate($translator->original, $target)->translatedText ?? $translator->original,
+                        'translation' => Translator::translate($translator->original, $target, config('translator.locale')) ?? $translator->original,
                     ]);
                 }
             });

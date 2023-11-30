@@ -2,20 +2,36 @@
 
 namespace enzolarosa\Translator;
 
+use Aws\Exception\AwsException;
+use Aws\Translate\TranslateClient;
 use enzolarosa\Translator\Models\Translator as Model;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
 
 class Translator
 {
-    public static function translate(string $text, string $target)
+    public static function translate(string $text, string $target, string $current = 'en'): ?string
     {
-        return Http::asJson()->post('https://translate.enzolarosa.dev/translate', [
-            'q' => $text,
-            'source' => 'auto',
-            'target' => $target,
-            'format' => 'text',
-        ])->object();
+        $client = new TranslateClient([
+            'credentials' => [
+                'key' => config('translator.aws.key'),
+                'secret' => config('translator.aws.secret'),
+            ],
+            'region' => config('translator.aws.region'),
+            'version' => 'latest',
+        ]);
+
+        try {
+            $result = $client->translateText([
+                'SourceLanguageCode' => $current,
+                'TargetLanguageCode' => $target,
+                'Text' => $text,
+            ]);
+
+            return $result['TranslatedText'];
+        } catch (AwsException $e) {
+            report($e);
+            return null;
+        }
     }
 
     public static function checkMissingTranslation($key): void
@@ -28,7 +44,7 @@ class Translator
 
     protected static function handleDatabaseDriver($key): void
     {
-        if (! Schema::hasTable(config('translator.store.database.table'))) {
+        if (!Schema::hasTable(config('translator.store.database.table'))) {
             return;
         }
         Model::query()->firstOrCreate([
@@ -44,7 +60,7 @@ class Translator
         $json = config('translator.locale') . '.json';
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
 
-        if (! isset($keys[$key])) {
+        if (!isset($keys[$key])) {
             dispatch(function () use ($json, $key) {
                 $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
                 $keys[$key] = $key;
