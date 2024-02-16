@@ -3,7 +3,6 @@
   "description": "Make easy the translation.",
   "keywords": [
     "laravel",
-    "nova",
     "translator"
   ],
   "license": "MIT",
@@ -12,7 +11,7 @@
     "ext-json": "*",
     "aws/aws-sdk-php": "^3.293.8",
     "friendsofphp/php-cs-fixer": "^3.41.1",
-    "illuminate/contracts": "^9.0|^10.0"
+    "illuminate/contracts": "^9.0|^10.0|^11.0"
   },
   "require-dev": {
     "nunomaduro/collision": "^7.10.0",
