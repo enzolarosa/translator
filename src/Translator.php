@@ -4,6 +4,7 @@ namespace enzolarosa\Translator;
 
 use Aws\Exception\AwsException;
 use Aws\Translate\TranslateClient;
+use enzolarosa\Translator\Jobs\GitPush;
 use enzolarosa\Translator\Models\Translator as Model;
 use Illuminate\Support\Facades\Schema;
 
@@ -49,7 +50,7 @@ class Translator
 
     protected static function handleDatabaseDriver($key): void
     {
-        if (! Schema::hasTable(config('translator.store.database.table'))) {
+        if (!Schema::hasTable(config('translator.store.database.table'))) {
             return;
         }
         Model::query()->firstOrCreate([
@@ -65,11 +66,12 @@ class Translator
         $json = config('translator.locale') . '.json';
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
 
-        if (! isset($keys[$key])) {
+        if (!isset($keys[$key])) {
             dispatch(function () use ($json, $key) {
                 $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
                 $keys[$key] = $key;
                 disk('translator')->put($json, json_encode(array_unique($keys)));
+                GitPush::dispatchIf(config('translator.git.autoPush'));
             })->onQueue(config('translator.horizon.queue'));
         }
     }

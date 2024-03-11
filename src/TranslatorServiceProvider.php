@@ -44,7 +44,7 @@ class TranslatorServiceProvider extends ServiceProvider
         ], 'translator-lang');
 
         $this->publishes([
-            __DIR__ . '/../database/migrations/20220620_072100_create_translator_table.php' => database_path('migrations/20220620_072100_create_translator_table.php'),
+            __DIR__ . '/../database/migrations/2022_06_20_072100_create_translator_table.php' => database_path('migrations/2022_06_20_072100_create_translator_table.php'),
         ], 'translator-migrations');
     }
 
