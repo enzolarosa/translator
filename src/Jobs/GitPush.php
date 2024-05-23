@@ -27,7 +27,7 @@ class GitPush implements ShouldQueue
             [
                 'git',
                 'commit',
-                '-m ' . config('translator.git.message'),
+                '-m '.config('translator.git.message'),
             ],
             [
                 'git',

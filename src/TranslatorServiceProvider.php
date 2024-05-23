@@ -30,30 +30,30 @@ class TranslatorServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/translator.php', 'translator');
+        $this->mergeConfigFrom(__DIR__.'/../config/translator.php', 'translator');
     }
 
-    protected function publishResources()
+    protected function publishResources(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/translator.php' => config_path('translator.php'),
+            __DIR__.'/../config/translator.php' => config_path('translator.php'),
         ], 'translator-config');
 
         $this->publishes([
-            __DIR__ . '/../lang/en.json' => lang_path('vendor/translator/en.json'),
+            __DIR__.'/../lang/en.json' => lang_path('vendor/translator/en.json'),
         ], 'translator-lang');
 
         $this->publishes([
-            __DIR__ . '/../database/migrations/2022_06_20_072100_create_translator_table.php' => database_path('migrations/2022_06_20_072100_create_translator_table.php'),
+            __DIR__.'/../database/migrations/2022_06_20_072100_create_translator_table.php' => database_path('migrations/2022_06_20_072100_create_translator_table.php'),
         ], 'translator-migrations');
     }
 
-    protected function registerCommands()
+    protected function registerCommands(): void
     {
         $this->commands($this->packageCommands);
     }
 
-    protected function registerResources()
+    protected function registerResources(): void
     {
         if (config('translator.driver') == 'database') {
             Model::query()
@@ -73,7 +73,7 @@ class TranslatorServiceProvider extends ServiceProvider
         $this->loadJsonTranslationsFrom(lang_path('vendor/translator'));
     }
 
-    protected function filesystems()
+    protected function filesystems(): void
     {
         config([
             'filesystems.disks.translator' => [
@@ -84,7 +84,7 @@ class TranslatorServiceProvider extends ServiceProvider
         ]);
     }
 
-    protected function horizon()
+    protected function horizon(): void
     {
         if (! config('translator.horizon.enabled')) {
             return;
@@ -103,7 +103,7 @@ class TranslatorServiceProvider extends ServiceProvider
                 'balanceMaxShift' => config('translator.horizon.balanceMaxShift'),
             ],
         ];
-        $queue = array_merge(config("horizon.defaults") ?? [], $queue);
-        config(["horizon.defaults" => $queue]);
+        $queue = array_merge(config('horizon.defaults') ?? [], $queue);
+        config(['horizon.defaults' => $queue]);
     }
 }

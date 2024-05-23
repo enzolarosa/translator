@@ -2,22 +2,14 @@
 
 namespace enzolarosa\Translator\Models;
 
-use enzolarosa\Translator\Traits\Models\ExternalId;
+use enzolarosa\Translator\Traits\Models\HasExternalId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Translator extends Model
 {
+    use HasExternalId;
     use HasFactory;
-    use ExternalId;
-
-    public function __construct()
-    {
-        $this->connection = config('translator.store.database.connection');
-        $this->table = config('translator.store.database.table');
-
-        parent::__construct();
-    }
 
     protected $fillable = [
         'original',
@@ -30,4 +22,12 @@ class Translator extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    public function __construct()
+    {
+        $this->connection = config('translator.store.database.connection');
+        $this->table = config('translator.store.database.table');
+
+        parent::__construct();
+    }
 }

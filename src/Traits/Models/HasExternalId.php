@@ -4,17 +4,17 @@ namespace enzolarosa\Translator\Traits\Models;
 
 use Illuminate\Support\Str;
 
-trait ExternalId
+trait HasExternalId
 {
-    public function getRouteKeyName()
-    {
-        return 'external_id';
-    }
-
-    public static function booted()
+    public static function bootHasExternalId()
     {
         static::creating(function ($model) {
             $model->external_id ??= Str::uuid();
         });
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'external_id';
     }
 }

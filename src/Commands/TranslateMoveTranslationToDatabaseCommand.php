@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class TranslateMoveTranslationToDatabaseCommand extends Command
 {
     public $signature = 'translate:move-file-to-database';
+
     protected $description = 'Move all files transaction to database';
 
     public function handle(): int

@@ -10,6 +10,7 @@ use Illuminate\Console\Command;
 class TranslateMissingStringCommand extends Command
 {
     public $signature = 'translate:missing-string';
+
     protected $description = 'Translate the missing string';
 
     public function handle(): int
@@ -24,7 +25,7 @@ class TranslateMissingStringCommand extends Command
 
     protected function handleDefaultDriver(): void
     {
-        $json = config('translator.locale') . '.json';
+        $json = config('translator.locale').'.json';
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
 
         $targets = config('translator.supported_language', []);
@@ -33,7 +34,7 @@ class TranslateMissingStringCommand extends Command
             $targetKeys = json_decode(disk('translator')->get("$target.json") ?? '[]', true);
             $count[$target] = 0;
             foreach ($keys as $key => $string) {
-                if (key_exists($key, $targetKeys)) {
+                if (array_key_exists($key, $targetKeys)) {
                     continue;
                 }
                 $translated = Translator::translate($string, $target, config('translator.locale')) ?? $string;

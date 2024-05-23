@@ -13,7 +13,7 @@ return [
         'it',
     ],
 
-    'driver' => env('TRANSLATOR_DRIVER', 'file'),//'database'
+    'driver' => env('TRANSLATOR_DRIVER', 'file'), //'database'
 
     'store' => [
         'database' => [
@@ -37,7 +37,7 @@ return [
     ],
 
     'aws' => [
-        'key' => env('AWS_TRANSLATE_API',),
+        'key' => env('AWS_TRANSLATE_API'),
         'secret' => env('AWS_TRANSLATE_KEY'),
         'region' => env('AWS_TRANSLATE_REGION', 'eu-central-1'),
     ],
