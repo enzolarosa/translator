@@ -3,10 +3,7 @@
 return [
     'git' => [
         'autoPush' => env('TRANSLATOR_AUTO_PUSH', false),
-        'message' => env('TRANSLATOR_COMMIT_MESSAGE', 'updated translation with `translator` package.'),
     ],
-
-    'locale' => 'en',
 
     'supported_language' => [
         'en',
@@ -16,11 +13,6 @@ return [
     'driver' => env('TRANSLATOR_DRIVER', 'file'), //'database'
 
     'store' => [
-        'database' => [
-            'table' => env('TRANSLATOR_TABLE_NAME', 'translator'),
-            'connection' => env('TRANSLATOR_DB_CONNECTION', 'mysql'),
-        ],
-
         'file' => [],
     ],
 

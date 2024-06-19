@@ -5,8 +5,6 @@ namespace enzolarosa\Translator;
 use Aws\Exception\AwsException;
 use Aws\Translate\TranslateClient;
 use enzolarosa\Translator\Jobs\GitPush;
-use enzolarosa\Translator\Models\Translator as Model;
-use Illuminate\Support\Facades\Schema;
 
 class Translator
 {
@@ -42,41 +40,31 @@ class Translator
 
     public static function checkMissingTranslation($key): void
     {
+        self::handleDefaultDriver($key);
+        /*
         match (config('translator.driver')) {
-            'database' => self::handleDatabaseDriver($key),
             default => self::handleDefaultDriver($key),
         };
-    }
-
-    protected static function handleDatabaseDriver($key): void
-    {
-        if (
-            ! Schema::connection(config('translator.store.database.connection'))
-                ->hasTable(config('translator.store.database.table'))
-        ) {
-            return;
-        }
-
-        Model::query()->firstOrCreate([
-            'language' => config('translator.locale'),
-            'original' => $key,
-        ], [
-            'translation' => $key,
-        ]);
+        */
     }
 
     protected static function handleDefaultDriver($key): void
     {
-        $json = config('translator.locale').'.json';
+        $json = config('app.locale').'.json';
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
 
         if (! isset($keys[$key])) {
-            dispatch(function () use ($json, $key) {
+            $job = function () use ($json, $key) {
                 $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
                 $keys[$key] = $key;
                 disk('translator')->put($json, json_encode(array_unique($keys)));
                 GitPush::dispatchIf(config('translator.git.autoPush'));
-            })->onQueue(config('translator.horizon.queue'));
+            };
+            if (config('translator.horizon.enabled')) {
+                dispatch($job)->onQueue(config('translator.horizon.queue', 'default'));
+            } else {
+                dispatch_sync($job);
+            }
         }
     }
 }

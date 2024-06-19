@@ -4,9 +4,6 @@ namespace enzolarosa\Translator;
 
 use enzolarosa\Translator\Commands\TranslateInstallCommand;
 use enzolarosa\Translator\Commands\TranslateMissingStringCommand;
-use enzolarosa\Translator\Commands\TranslateMoveTranslationToDatabaseCommand;
-use enzolarosa\Translator\Models\Translator as Model;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class TranslatorServiceProvider extends ServiceProvider
@@ -14,7 +11,6 @@ class TranslatorServiceProvider extends ServiceProvider
     public array $packageCommands = [
         TranslateInstallCommand::class,
         TranslateMissingStringCommand::class,
-        TranslateMoveTranslationToDatabaseCommand::class,
     ];
 
     public function boot()
@@ -31,22 +27,18 @@ class TranslatorServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/translator.php', 'translator');
+        $this->mergeConfigFrom(__DIR__.'/../config/translator.php', 'translator');
     }
 
     protected function publishResources(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/translator.php' => config_path('translator.php'),
+            __DIR__.'/../config/translator.php' => config_path('translator.php'),
         ], 'translator-config');
 
         $this->publishes([
-            __DIR__ . '/../lang/en.json' => lang_path('vendor/translator/en.json'),
+            __DIR__.'/../lang/en.json' => lang_path('vendor/translator/en.json'),
         ], 'translator-lang');
-
-        $this->publishes([
-            __DIR__ . '/../database/migrations/2022_06_20_072100_create_translator_table.php' => database_path('migrations/2022_06_20_072100_create_translator_table.php'),
-        ], 'translator-migrations');
     }
 
     protected function registerCommands(): void
@@ -56,24 +48,6 @@ class TranslatorServiceProvider extends ServiceProvider
 
     protected function registerResources(): void
     {
-        if (config('translator.driver') == 'database' &&
-            Schema::connection(config('translator.store.database.connection'))
-                ->hasTable(config('translator.store.database.table'))
-        ) {
-            Model::query()
-                ->select('language')
-                ->distinct()
-                ->pluck('language')
-                ->each(function ($lang) {
-                    file_put_contents(lang_path("vendor/translator/$lang.json"), json_encode(
-                        Model::query()
-                            ->where('language', $lang)
-                            ->pluck('translation', 'original')
-                            ->toArray()
-                    ));
-                });
-        }
-
         $this->loadJsonTranslationsFrom(lang_path('vendor/translator'));
     }
 
@@ -90,7 +64,7 @@ class TranslatorServiceProvider extends ServiceProvider
 
     protected function horizon(): void
     {
-        if (!config('translator.horizon.enabled')) {
+        if (! config('translator.horizon.enabled')) {
             return;
         }
 

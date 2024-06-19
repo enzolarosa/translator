@@ -3,20 +3,21 @@
 namespace enzolarosa\Translator\Commands;
 
 use enzolarosa\Translator\Jobs\GitPush;
-use enzolarosa\Translator\Models\Translator as Model;
 use enzolarosa\Translator\Translator;
 use Illuminate\Console\Command;
 
 class TranslateMissingStringCommand extends Command
 {
-    public $signature = 'translate:missing-string';
+    public $signature = 'translate:missing-string {--force}';
 
     protected $description = 'Translate the missing string';
 
+    protected bool $force = false;
+
     public function handle(): int
     {
+        $this->force = $this->option('force') ?? false;
         match (config('translator.driver')) {
-            'database' => $this->handleDatabaseDriver(),
             default => $this->handleDefaultDriver(),
         };
 
@@ -29,41 +30,31 @@ class TranslateMissingStringCommand extends Command
         $keys = json_decode(disk('translator')->get($json) ?? '[]', true);
 
         $targets = config('translator.supported_language', []);
-
+        $count = [];
         foreach ($targets as $target) {
             $targetKeys = json_decode(disk('translator')->get("$target.json") ?? '[]', true);
-            $count[$target] = 0;
+            $num = 0;
             foreach ($keys as $key => $string) {
-                if (array_key_exists($key, $targetKeys)) {
+                if (array_key_exists($key, $targetKeys) && ! $this->force) {
                     continue;
                 }
-                $translated = Translator::translate($string, $target, config('translator.locale')) ?? $string;
+                $translated = Translator::translate($string, $target, config('app.locale')) ?? $string;
                 $targetKeys[$key] = $translated;
-                $count[$target]++;
+                $num++;
                 $this->line("[$target] ===> `$string` will be: `$translated`");
             }
+            $count = [
+                'target' => $target,
+                'count' => $num,
+            ];
             disk('translator')->put("$target.json", json_encode(array_unique($targetKeys)));
         }
+        $this->line(localize('translator.missing_string.recap'));
 
-        if (config('translator.git.autoPush', false)) {
-            GitPush::dispatch();
-        }
-    }
+        $this->table([
+            'targets', 'count',
+        ], $count);
 
-    protected function handleDatabaseDriver(): void
-    {
-        $keys = Model::query()
-            ->where('language', config('translator.locale'))
-            ->cursor()
-            ->each(function (Model $translator) {
-                foreach (config('translator.supported_language', []) as $target) {
-                    Model::query()->firstOrCreate([
-                        'language' => $target,
-                        'original' => $translator->original,
-                    ], [
-                        'translation' => Translator::translate($translator->original, $target, config('translator.locale')) ?? $translator->original,
-                    ]);
-                }
-            });
+        GitPush::dispatchIf(config('translator.git.autoPush'));
     }
 }

@@ -12,15 +12,12 @@ class TranslateInstallCommand extends Command
 
     public function handle()
     {
-        $this->comment(localize('Publishing Translate configuration...'));
+        $this->comment(localize('translator.installation.config'));
         $this->callSilent('vendor:publish', ['--tag' => 'translator-config']);
 
-        $this->comment(localize('Publishing Translate language file...'));
+        $this->comment(localize('translator.installation.language'));
         $this->callSilent('vendor:publish', ['--tag' => 'translator-lang']);
 
-        $this->comment('Publishing Translate migrations...');
-        $this->callSilent('vendor:publish', ['--tag' => 'translator-migrations']);
-
-        $this->info(localize('Translate was installed successfully.'));
+        $this->info(localize('translator.installation.ok'));
     }
 }

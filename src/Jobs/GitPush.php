@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Process;
 
 class GitPush implements ShouldQueue
 {
@@ -27,7 +27,7 @@ class GitPush implements ShouldQueue
             [
                 'git',
                 'commit',
-                '-m '.config('translator.git.message'),
+                '-m '.localize('translator.git.commit.message'),
             ],
             [
                 'git',
@@ -35,9 +35,8 @@ class GitPush implements ShouldQueue
             ],
         ];
 
-        foreach ($commands as $command) {
-            $process = new Process($command, base_path(''));
-            $process->mustRun();
+        foreach ($commands as $k => $command) {
+            Process::path(base_path())->run($command);
         }
     }
 }

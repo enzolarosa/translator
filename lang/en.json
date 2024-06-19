@@ -1,6 +1,7 @@
 {
-  "The selected locale `:locale` wasn't found in your configuration.": "The selected locale `:locale` wasn't found in your configuration.",
-  "Publishing Translate configuration...": "Publishing Translate configuration...",
-  "Publishing Translate language file...": "Publishing Translate language file...",
-  "Translate was installed successfully.": "Translate was installed successfully."
+  "translator.git.commit.message": "updated translation with `translator` package.",
+  "translator.missing_string.recap": "Translations counting by target",
+  "translator.installation.ok": "Translate was installed successfully.",
+  "translator.installation.config": "Publishing Translate configuration...",
+  "translator.installation.language": "Publishing Translate language file..."
 }
