@@ -2,7 +2,7 @@
   "translator.git.commit.message": "updated translation with `translator` package.",
   "translator.missing_command.recap.table.title": "Translations counting by target",
   "translator.missing_command.target.title": "Working to `:target` language",
-  "translator.missing_command.target.complete": "\t:target completed",
+  "translator.missing_command.target.complete": "\n\t`:target` completed.",
   "translator.installation.ok": "Translate was installed successfully.",
   "translator.installation.config": "Publishing Translate configuration...",
   "translator.installation.language": "Publishing Translate language file..."

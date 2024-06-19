@@ -55,7 +55,7 @@ class TranslateMissingStringCommand extends Command
                 $bar->advance();
             }
             $bar->finish();
-            $this->info(localize('translator.missing_command.target.complete', [
+            $this->line(localize('translator.missing_command.target.complete', [
                 'target' => $target,
             ]));
 
